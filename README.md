@@ -1,4 +1,4 @@
-# Algoritm
+# Adapthing Coding
 ФИО:
 Безрукова Анастасия Леонидовна
 Вуз:
