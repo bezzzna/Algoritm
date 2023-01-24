@@ -1,4 +1,4 @@
-# Adaptive Arithmetic Coding
+#Arithmetic Coding
 ФИО:
 Безрукова Анастасия Леонидовна
 Вуз:
