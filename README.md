@@ -1,4 +1,4 @@
-#иArithmetic Coding
+# Arithmetic Coding
 ФИО:
 Безрукова Анастасия Леонидовна
 Вуз:
