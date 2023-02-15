@@ -8,6 +8,7 @@ using namespace std;
 
 int main(int argc, char** argv) 
 {	
+	//часть кода для тестирования
 	ofstream out;
 	for (int iter = 0; iter < 30; iter++)
 	{
