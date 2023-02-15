@@ -1,37 +1,62 @@
 #include <iostream>
 #include "lib.h"
 #include <string>
+#include <fstream>
+#include <chrono>
 
 using namespace std;
 
 int main(int argc, char** argv) 
-{
-	setlocale(LC_ALL, "Russian");
-	cout<<"Ââåäèòå äëèíó ñîîáùåíèÿ:\n";
-	int n;
-	string message;
-	cin>>n;
-	string m;
-	for (int i=0; i<n; i++) //ðàíäîìíàÿ ãåíåðàöèÿ ñîîáùåíèÿ (èñïîëüçóåòñÿ äëÿ òåñòîâ)
+{	
+	ofstream out;
+	for (int iter = 0; iter < 30; iter++)
 	{
-		m=char('a' + rand() % ('z' - 'a'));
-		message+=m;
+		string iters = to_string(iter);
+		out.open(iters+" - in.txt");
+		setlocale(LC_ALL, "Russian");
+		cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ð»Ð¸Ð½Ñƒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ:\n";
+		int n;
+		string message;
+		cin >> n;
+		string m;
+		for (int i = 0; i < n; i++) //Ñ€Ð°Ð½Ð´Ð¾Ð¼Ð½Ð°Ñ Ð³ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ñ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ (Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ Ð´Ð»Ñ Ñ‚ÐµÑÑ‚Ð¾Ð²)
+		{
+			m = char('a' + rand() % ('z' - 'a'));
+			message += m;
+		}
+		
+		double length = message.length();
+		cout << "ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ð¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ:\n" << message << "\n";
+		cout << "Ð”Ð»Ð¸Ð½Ð° Ð²Ð²ÐµÐ´Ñ‘Ð½Ð½Ð¾Ð³Ð¾ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ: " << message.length() << "\n";
+		double* ver = new double[message.length()]; //Ð²ÐµÑ€Ð¾ÑÑ‚Ð½Ð¾ÑÑ‚Ð¸ 
+		double* vgran = new double[message.length()]; //Ð²ÐµÑ€Ñ… Ð³Ñ€Ð°Ð½Ð¸Ñ†Ñ‹
+		double* ngran = new double[message.length() + 1]; //Ð½Ð¸Ð· Ð³Ñ€Ð°Ð½Ð¸Ñ†Ñ‹
+		string std = generate(n, message, ver, vgran, ngran);  //ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð°Ð»Ñ„Ð°Ð²Ð¸Ñ‚Ð°, Ð¿Ð¾Ð´ÑÑ‡Ñ‘Ñ‚ Ð²ÐµÑ€Ð¾ÑÑ‚Ð½Ð¾ÑÑ‚Ð¸, Ð²Ñ‹Ñ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ðµ Ð³Ñ€Ð°Ð½Ð¸Ñ†
+		//cout << "\nÐ‘ÑƒÐºÐ²Ð°:" << "\t" << "Ð’ÐµÑ€Ð¾ÑÑ‚Ð½Ð¾ÑÑ‚ÑŒ:\t ÐÐ¸Ð¶.Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°: \t Ð’ÐµÑ€Ñ….Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°:\n";
+		out << "Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð½Ð° Ð²Ñ…Ð¾Ð´Ðµ: " << message;
+		out.close();
+		out.open(iters + " - out.txt");
+		out << "\nÐ‘ÑƒÐºÐ²Ð°:" << "\t" << "Ð’ÐµÑ€Ð¾ÑÑ‚Ð½Ð¾ÑÑ‚ÑŒ:\t ÐÐ¸Ð¶.Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°: \t Ð’ÐµÑ€Ñ….Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°:\n";
+		for (int i = 0; i < std.length(); i++)
+		{
+			//cout << std[i] << "\t" << ver[i] << "\t\t " << ngran[i] << "\t\t " << vgran[i] << "\n";
+			out << std[i] << "\t" << ver[i] << "\t\t " << ngran[i] << "\t\t " << vgran[i] << "\n";
+		}
+		auto start = chrono::steady_clock::now();//Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼Ð¾Ð¼ÐµÐ½Ñ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸
+		double Low = coding(ngran, vgran, std);
+		auto stop = chrono::steady_clock::now();//Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÐºÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ð¹ Ð¼Ð¾Ð¼ÐµÐ½Ñ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸
+		out << "Ð—Ð°ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ:" << Low;
+		out << "\nCODING TIME: " << chrono::duration_cast<chrono::nanoseconds>(stop - start).count() << " nanoseconds" << endl;//Ð²Ñ‹Ð²Ð¾Ð´ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+		//cout << "\nÐ—Ð°ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ:" << Low;
+		start = chrono::steady_clock::now();//Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼Ð¾Ð¼ÐµÐ½Ñ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸
+		string message1 = decoding(Low, ver, std, message.length());
+		stop = chrono::steady_clock::now();//Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÐºÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ð¹ Ð¼Ð¾Ð¼ÐµÐ½Ñ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸
+		//cout << "\nÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ð¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¿Ð¾ÑÐ»Ðµ Ð´ÐµÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ:\n" << message1 << "\n";
+		out << "\nÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ð¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¿Ð¾ÑÐ»Ðµ Ð´ÐµÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ:\n" << message1 << "\n";
+		out << "\nDECODING TIME: " << chrono::duration_cast<chrono::nanoseconds>(stop - start).count() << " nanoseconds" << endl;//Ð²Ñ‹Ð²Ð¾Ð´ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+		out.close();
+		//ÐŸÐ¾ÑÐ»Ðµ Ð´ÐµÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ ÐºÐ¾Ð´Ð° Ð¼Ð¾Ð¶Ð½Ð¾ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ, Ð¾Ñ‚Ð»Ð¸Ñ‡Ð°ÑŽÑ‰ÐµÐµÑÑ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼Ð¸ ÑÐ¸Ð¼Ð²Ð¾Ð»Ð°Ð¼Ð¸, Ñ‚.Ðº Ð³Ñ€Ð°Ð½Ð¸Ñ†Ñ‹ Ð¸Ð·-Ð·Ð° 
+		//Ð¾ÐºÐ³Ñ€ÑƒÐ»ÐµÐ½Ð¸Ñ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÑŽÑ‚ÑÑ. (Ð”Ð»Ñ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾Ð¹ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ð´ÐµÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Ð½ÑƒÐ¶Ð½Ð¾ Ð±Ñ€Ð°Ñ‚ÑŒ Ð½Ðµ ÑÐ»Ð¸ÑˆÐºÐ¾Ð¼ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¸ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ð¸).
 	}
-	double length = message.length(); 
-	cout<<"Ïîëó÷åííîå ñîîáùåíèå:\n"<<message<<"\n";
-	cout<<"Äëèíà ââåä¸ííîãî ñîîáùåíèÿ: "<<message.length()<<"\n";
-	double *ver = new double[message.length()]; //âåðîÿòíîñòè 
-	double *vgran = new double[message.length()]; //âåðõ ãðàíèöû
-	double *ngran = new double[message.length()+1]; //íèç ãðàíèöû
-	string std = generate(n, message, ver, vgran, ngran);  //ñîñòàâëåíèå àëôàâèòà, ïîäñ÷¸ò âåðîÿòíîñòè, âû÷èñëåíèå ãðàíèö
-	cout<<"\nÁóêâà:"<<"\t"<<"Âåðîÿòíîñòü:\t Íèæ.ãðàíèöà: \t Âåðõ.ãðàíèöà:\n";
-	for (int i=0; i<std.length(); i++)
-		cout<<std[i]<<"\t"<<ver[i]<<"\t\t "<<ngran[i]<<"\t\t "<<vgran[i]<<"\n";
-	double Low = coding(ngran, vgran, std);
-	cout<<"\nÇàêîäèðîâàííîå ñîîáùåíèå:"<<Low;
-	string message1 = decoding (Low, ver, std, message.length());
-	cout<<"\nÏîëó÷åííîå ñîîáùåíèå ïîñëå äåêîäèðîâàíèÿ:\n"<<message1<<"\n";
-	//Ïîñëå äåêîäèðîâàíèÿ êîäà ìîæíî ïîëó÷èòü ñîîáùåíèå, îòëè÷àþùååñÿ íåêîòîðûìè ñèìâîëàìè, ò.ê ãðàíèöû èç-çà 
-	//îêãðóëåíèÿ ïîâòîðÿþòñÿ. (Äëÿ óñïåøíîé ïðîâåðêè ðàáîòû äåêîäèðîâàíèÿ íóæíî áðàòü íå ñëèøêîì áîëüøîå ñîîáùåíèå ïðè êîäèðîâàíèè).
 	return 0;
 }
