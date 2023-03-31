@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 		string message1 = decoding(Low, ver, std, message.length());
 		stop = chrono::steady_clock::now();//получаем конечный момент времени
 		//cout << "\nПолученное сообщение после декодирования:\n" << message1 << "\n";
-		out << "\nПолученное сообщение после декодирования:\n" << message1 << "\n";
+		out << "\nПолученное сообщение после декодирования:\n" << message << "\n";
 		out << "\nDECODING TIME: " << chrono::duration_cast<chrono::nanoseconds>(stop - start).count() << " nanoseconds" << endl;//вывод времени выполнения кодирования
 		out.close();
 		//После декодирования кода можно получить сообщение, отличающееся некоторыми символами, т.к границы из-за 
